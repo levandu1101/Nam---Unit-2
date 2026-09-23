@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 2: Healthy Living - Masterclass</title>
+<style>
+:root{--blue:#2563EB;--blue-l:#DBEAFE;--red:#DC2626;--red-l:#FEE2E2;--green:#16A34A;--green-l:#DCFCE7;--purple:#9333EA;--purple-l:#F3E8FF;--amber:#D97706;--amber-l:#FEF3C7;--gray:#4B5563;--gray-l:#F3F4F6;--bg:#F9FAFB}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:#1F2937;line-height:1.5}
+.app{max-width:900px;margin:0 auto;background:#fff;min-height:100vh;box-shadow:0 4px 6px -1px rgba(0,0,0,0.1)}
+.hdr{background:var(--green);color:#fff;padding:20px;text-align:center;position:sticky;top:0;z-index:100}
+.hdr h1{font-size:1.5rem;margin-bottom:5px}
+.hdr p{font-size:.9rem;opacity:.9}
+/* NAV */
+.nav{display:flex;overflow-x:auto;background:var(--green-l);padding:10px}
+.nb{padding:8px 16px;border:none;background:none;font-weight:700;color:var(--green);cursor:pointer;border-radius:20px;white-space:nowrap;transition:all .2s}
+.nb.on, .nb:hover{background:var(--green);color:#fff}
+.main{padding:20px}
+.sec{display:none;animation:fadeUp .3s ease-out}.sec.on{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+/* CARDS & UTILS */
+.card{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
+.sh{margin-bottom:15px;padding-bottom:10px;border-bottom:2px solid var(--gray-l)}
+.sh h2{color:var(--green);font-size:1.3rem;display:flex;align-items:center;gap:8px}
+.btn{padding:8px 16px;border:none;border-radius:8px;font-weight:600;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+.btn-b{background:var(--blue);color:#fff}.btn-b:hover{background:#1D4ED8}
+.btn-g{background:var(--green);color:#fff}.btn-g:hover{background:#15803D}
+.btn-o{background:#fff;border:1px solid #D1D5DB;color:var(--gray)}.btn-o:hover{background:var(--gray-l)}
+/* TABS (For within sections) */
+.tabs{display:flex;gap:8px;border-bottom:2px solid var(--gray-l);margin-bottom:15px;overflow-x:auto}
+.tb{padding:8px 12px;border:none;background:none;font-weight:600;color:var(--gray);cursor:pointer;border-bottom:3px solid transparent}
+.tb.on{color:var(--blue);border-bottom-color:var(--blue)}
+.tpan{display:none}.tpan.on{display:block;animation:fadeUp .3s}
+/* COLORS FOR GRAMMAR/VOCAB */
+.w-s{color:var(--blue);font-weight:700}.w-v{color:var(--amber);font-weight:700}.w-o{color:var(--green);font-weight:700}.w-a{color:var(--purple);font-weight:700}
+.bg-s{background:var(--blue-l);border:1px solid var(--blue);color:var(--blue)}.bg-v{background:var(--amber-l);border:1px solid var(--amber);color:var(--amber)}.bg-o{background:var(--green-l);border:1px solid var(--green);color:var(--green)}.bg-a{background:var(--purple-l);border:1px solid var(--purple);color:var(--purple)}
+/* FLASHCARDS */
+.fc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:15px}
+.fc{perspective:1000px;height:140px;cursor:pointer}
+.fc-in{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d;border-radius:12px;box-shadow:0 2px 4px rgba(0,0,0,.1)}
+.fc.flip .fc-in{transform:rotateY(180deg)}
+.fc-f, .fc-b{position:absolute;width:100%;height:100%;backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:12px;padding:10px;text-align:center}
+.fc-f{background:#fff;border:2px solid var(--blue-l)}
+.fc-b{background:var(--blue);color:#fff;transform:rotateY(180deg)}
+.fc-w{font-size:1.2rem;font-weight:700;color:var(--blue);margin-bottom:5px}
+.fc-type{font-size:.75rem;background:var(--blue-l);color:var(--blue);padding:2px 8px;border-radius:10px}
+.fc-btn{position:absolute;top:5px;right:5px;background:none;border:none;cursor:pointer;font-size:1.2rem;opacity:.6}
+.fc-btn:hover{opacity:1}
+/* DRAG DROP */
+.zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:15px}
+.zone{background:var(--gray-l);border:2px dashed #9CA3AF;border-radius:8px;min-height:120px;display:flex;flex-direction:column}
+.zone.over{border-color:var(--blue);background:var(--blue-l)}
+.zh{background:#D1D5DB;padding:5px;text-align:center;font-weight:700;font-size:.85rem;border-radius:6px 6px 0 0}
+.zb{padding:10px;flex:1;display:flex;flex-wrap:wrap;gap:5px;align-content:flex-start}
+.tile{background:#fff;border:1px solid #D1D5DB;padding:5px 10px;border-radius:15px;font-size:.85rem;cursor:grab;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.tile:active{cursor:grabbing}
+.tile.ok{background:var(--green-l);border-color:var(--green);color:var(--green)}
+.tile.no{background:var(--red-l);border-color:var(--red);color:var(--red)}
+.src-area{padding:15px;background:#fff;border:1px solid #E5E7EB;border-radius:8px;min-height:60px;display:flex;flex-wrap:wrap;gap:8px;margin-bottom:15px}
+/* EXERCISES */
+.qq{margin-bottom:20px;padding-bottom:15px;border-bottom:1px solid var(--gray-l)}
+.qq:last-child{border-bottom:none}
+.qn{font-size:.8rem;color:var(--gray);font-weight:700;text-transform:uppercase;margin-bottom:5px}
+.qt{font-weight:600;margin-bottom:10px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{padding:10px 15px;border:1px solid #E5E7EB;border-radius:8px;cursor:pointer;transition:all .2s;background:#fff}
+.opt:hover{border-color:var(--blue);background:var(--blue-l)}
+.opt.sel{border-color:var(--blue);background:var(--blue);color:#fff}
+.opt.ok{border-color:var(--green);background:var(--green);color:#fff}
+.opt.no{border-color:var(--red);background:var(--red);color:#fff}
+.fb{margin-top:10px;padding:10px;border-radius:8px;font-size:.9rem;display:none}
+.fb.ok{background:var(--green-l);border:1px solid var(--green);color:#065F46}
+.fb.no{background:var(--red-l);border:1px solid var(--red);color:#991B1B}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="hdr">
+    <h1>Unit 2: Healthy Living</h1>
+    <p>Interactive 6-Hour Lesson & Masterclass</p>
+  </div>
+  <div class="nav">
+    <button class="nb on" onclick="nav('voc')">1. Vocab</button>
+    <button class="nb" onclick="nav('pro')">2. Pronunciation</button>
+    <button class="nb" onclick="nav('gra')">3. Grammar</button>
+    <button class="nb" onclick="nav('rea')">4. Reading</button>
+    <button class="nb" onclick="nav('lis')">5. Listening</button>
+    <button class="nb" onclick="nav('spe')">6. Speaking</button>
+    <button class="nb" onclick="nav('wri')">7. Writing</button>
+    <button class="nb" onclick="nav('mt')">8. Mock Tests</button>
+  </div>
+
+  <div class="main">
+    <!-- VOCABULARY -->
+    <div class="sec on" id="voc">
+      <div class="sh"><h2>🔤 Vocabulary: Health & Activities</h2></div>
+      <div class="card">
+        <div class="tabs">
+          <button class="tb on" onclick="tab('v_fc',this,'vt')">Present (Flashcards)</button>
+          <button class="tb" onclick="tab('v_p1',this,'vt')">Practice 1 (Sort)</button>
+          <button class="tb" onclick="tab('v_p2',this,'vt')">Practice 2 (Apply)</button>
+        </div>
+        <div id="v_fc" class="tpan on vt">
+          <p style="margin-bottom:15px;color:var(--gray);font-size:.9rem">Click cards to flip. Click 🔊 to hear pronunciation.</p>
+          <div class="fc-grid" id="fcg"></div>
+        </div>
+        <div id="v_p1" class="tpan vt">
+          <p style="margin-bottom:15px;color:var(--gray);font-size:.9rem">Drag the words into the correct category.</p>
+          <div class="src-area" id="vdnd_src" ondragover="event.preventDefault()" ondrop="vdDrop(event,'src')"></div>
+          <div class="zones" style="grid-template-columns:1fr 1fr 1fr">
+            <div class="zone" ondragover="event.preventDefault()" ondrop="vdDrop(event,'ha')"><div class="zh">Healthy Activities</div><div class="zb" id="z_ha"></div></div>
+            <div class="zone" ondragover="event.preventDefault()" ondrop="vdDrop(event,'ua')"><div class="zh">Unhealthy Activities</div><div class="zb" id="z_ua"></div></div>
+            <div class="zone" ondragover="event.preventDefault()" ondrop="vdDrop(event,'hp')"><div class="zh">Health Problems</div><div class="zb" id="z_hp"></div></div>
+          </div>
+          <button class="btn btn-b" onclick="vdCheck()">Check Answers</button> <button class="btn btn-o" onclick="vdInit()">Reset</button>
+          <div id="vd_res" style="margin-top:10px"></div>
+        </div>
+        <div id="v_p2" class="tpan vt">
+          <p style="margin-bottom:15px;color:var(--gray);font-size:.9rem">Read the sentence and choose the best word.</p>
+          <div id="v_mc"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRONUNCIATION -->
+    <div class="sec" id="pro">
+      <div class="sh"><h2>🗣️ Pronunciation: /f/ and /v/</h2></div>
+      <div class="card">
+        <p style="margin-bottom:15px;color:var(--gray);font-size:.9rem">Listen to the words and sort them by their sound. Click the word to hear it!</p>
+        <div class="src-area" id="pdnd_src" ondragover="event.preventDefault()" ondrop="pdDrop(event,'src')"></div>
+        <div class="zones" style="grid-template-columns:1fr 1fr;max-width:500px;margin:0 auto 15px auto">
+          <div class="zone" ondragover="event.preventDefault()" ondrop="pdDrop(event,'f')"><div class="zh" style="background:var(--blue-l);color:var(--blue);font-size:1.2rem">/f/ (e.g. fat, cough)</div><div class="zb" id="z_pf"></div></div>
+          <div class="zone" ondragover="event.preventDefault()" ondrop="pdDrop(event,'v')"><div class="zh" style="background:var(--green-l);color:var(--green);font-size:1.2rem">/v/ (e.g. van, active)</div><div class="zb" id="z_pv"></div></div>
+        </div>
+        <div style="text-align:center"><button class="btn btn-b" onclick="pdCheck()">Check Answers</button> <button class="btn btn-o" onclick="pdInit()">Reset</button></div>
+        <div id="pd_res" style="margin-top:10px;text-align:center"></div>
+      </div>
+    </div>
+
+    <!-- Placeholders for other sections -->
+    <!-- GRAMMAR -->
+    <div class="sec" id="gra">
+      <div class="sh"><h2>📝 Grammar: Simple Sentences</h2></div>
+      <div class="card">
+        <div class="tabs">
+          <button class="tb on" onclick="tab('g_mc',this,'gt')">Masterclass</button>
+          <button class="tb" onclick="tab('g_p1',this,'gt')">1. Identify</button>
+          <button class="tb" onclick="tab('g_p2',this,'gt')">2. Unscramble</button>
+          <button class="tb" onclick="tab('g_p3',this,'gt')">3. Create</button>
+        </div>
+        
+        <div id="g_mc" class="tpan on gt">
+          <p style="margin-bottom:15px">A <strong>simple sentence</strong> has ONE independent clause. It must have a Subject and a Verb, and may have an Object or Adverb.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:15px">
+            <div class="bg-s" style="padding:10px;border-radius:8px;flex:1"><strong style="font-size:1.1rem">Subject (S)</strong><br><span style="font-size:.85rem">Who or what does the action?</span></div>
+            <div class="bg-v" style="padding:10px;border-radius:8px;flex:1"><strong style="font-size:1.1rem">Verb (V)</strong><br><span style="font-size:.85rem">What is the action?</span></div>
+            <div class="bg-o" style="padding:10px;border-radius:8px;flex:1"><strong style="font-size:1.1rem">Object (O)</strong><br><span style="font-size:.85rem">Who or what receives it?</span></div>
+            <div class="bg-a" style="padding:10px;border-radius:8px;flex:1"><strong style="font-size:1.1rem">Adverb (Adv)</strong><br><span style="font-size:.85rem">When/Where/How?</span></div>
+          </div>
+          <div style="background:var(--gray-l);padding:15px;border-radius:8px;border-left:4px solid var(--gray)">
+            <strong>Examples:</strong><br><br>
+            1. <span class="w-s">I</span> <span class="w-v">read</span>. (S + V)<br><br>
+            2. <span class="w-s">I</span> <span class="w-v">read</span> <span class="w-o">science books</span>. (S + V + O)<br><br>
+            3. <span class="w-s">I</span> <span class="w-v">read</span> <span class="w-o">science books</span> <span class="w-a">every weekend</span>. (S + V + O + Adv)
+          </div>
+        </div>
+
+        <div id="g_p1" class="tpan gt">
+          <p style="margin-bottom:15px;color:var(--gray);font-size:.9rem">Read the sentence. What part of speech is the <u style="font-weight:700">underlined</u> word/phrase?</p>
+          <div id="g_id"></div>
+        </div>
+
+        <div id="g_p2" class="tpan gt">
+          <p style="margin-bottom:15px;color:var(--gray);font-size:.9rem">Click the words in the correct order to make a simple sentence.</p>
+          <div id="g_un"></div>
+        </div>
+
+        <div id="g_p3" class="tpan gt">
+          <p style="margin-bottom:15px;color:var(--gray);font-size:.9rem">Write your own simple sentence using the prompts! Must include S+V.</p>
+          <div class="qq">
+            <div class="qt">Prompt: tofu / healthy</div>
+            <input type="text" id="g_c1" placeholder="Type your sentence here..." style="width:100%;padding:10px;border:1px solid #D1D5DB;border-radius:6px;font-family:inherit">
+          </div>
+          <div class="qq">
+            <div class="qt">Prompt: father / exercise / every morning</div>
+            <input type="text" id="g_c2" placeholder="Type your sentence here..." style="width:100%;padding:10px;border:1px solid #D1D5DB;border-radius:6px;font-family:inherit">
+          </div>
+          <button class="btn btn-b" onclick="alert('Great job! Since this is creative writing, show these to your teacher for feedback!')">Submit</button>
+        </div>
+      </div>
+    </div>
+    <!-- READING -->
+    <div class="sec" id="rea">
+      <div class="sh"><h2>📖 Reading: Acne & Skin Conditions</h2></div>
+      <div class="card">
+        <div style="background:var(--blue-l);padding:15px;border-radius:8px;border-left:4px solid var(--blue);margin-bottom:20px;font-size:.95rem">
+          <p>Acne is a skin condition. It causes small, red spots on the face and the back. It affects 70-80% of young people between 12 and 30. More girls have acne than boys. It's not a serious disease but young people want to avoid it.</p>
+          <br>
+          <p>Here are some tips for taking care of skin with acne:</p>
+          <ul style="margin-left:20px;margin-top:5px">
+            <li>Go to bed early and get enough sleep.</li>
+            <li>Eat more fruit and vegetables, and less fast food.</li>
+            <li>Wash your face with special soap for acne, but no more than twice a day.</li>
+            <li>Don't touch or pop spots, especially when your hands are dirty.</li>
+            <li>If it gets serious, see a doctor.</li>
+          </ul>
+        </div>
+        
+        <p style="font-weight:700;margin-bottom:10px">Read the passage and answer the questions:</p>
+        <div id="r_mc"></div>
+      </div>
+    </div>
+
+    <!-- LISTENING -->
+    <div class="sec" id="lis">
+      <div class="sh"><h2>🎧 Listening: Healthy Habits</h2></div>
+      <div class="card">
+        <p style="margin-bottom:15px;color:var(--gray);font-size:.9rem">Select a practice script below. Listen to the audio and complete the exercises.</p>
+
+        <div class="tabs">
+          <button class="tb on" onclick="tab('l_s1',this,'lscript')">Practice 1</button>
+          <button class="tb" onclick="tab('l_s2',this,'lscript')">Practice 2</button>
+        </div>
+
+        <div id="l_s1" class="tpan on lscript">
+          <button class="btn btn-b" onclick="playListen(1)" style="margin-bottom:20px;font-size:1.1rem">▶️ Play Audio 1</button>
+          <p style="margin-bottom:10px;font-weight:700">1. Which habits were mentioned? (Tick the boxes)</p>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:15px">
+            <label><input type="checkbox" id="lh1"> eating healthy food</label>
+            <label><input type="checkbox" id="lh2"> travelling a lot</label>
+            <label><input type="checkbox" id="lh3"> exercising daily</label>
+            <label><input type="checkbox" id="lh4"> sleeping 8 hours</label>
+            <label><input type="checkbox" id="lh5"> playing video games</label>
+          </div>
+          <button class="btn btn-g" onclick="checkL1()">Check</button>
+          <div id="l1_res" class="fb"></div>
+
+          <p style="margin-top:20px;margin-bottom:10px;font-weight:700">2. Listen again and fill in the blanks:</p>
+          <div class="qq">1. Eat a lot of meat and <input type="text" id="ld1" class="wfi" style="width:100px;display:inline-block">.</div>
+          <div class="qq">2. Get <input type="text" id="ld2" class="wfi" style="width:100px;display:inline-block"> hours of sleep daily.</div>
+          <div class="qq">3. Be <input type="text" id="ld3" class="wfi" style="width:100px;display:inline-block"> and exercise every day.</div>
+          <button class="btn btn-g" onclick="checkL2()">Check</button>
+          <div id="l2_res" class="fb"></div>
+        </div>
+
+        <div id="l_s2" class="tpan lscript">
+          <button class="btn btn-b" onclick="playListen(2)" style="margin-bottom:20px;font-size:1.1rem">▶️ Play Audio 2</button>
+          
+          <p style="margin-bottom:10px;font-weight:700">1. True or False?</p>
+          <div class="qq">
+            <div style="margin-bottom:5px">You should wash your face three times a day.</div>
+            <select id="ltf1" style="padding:5px;border-radius:4px"><option value="">--</option><option value="T">True</option><option value="F">False</option></select>
+          </div>
+          <div class="qq">
+            <div style="margin-bottom:5px">Touching your face with dirty hands causes red spots.</div>
+            <select id="ltf2" style="padding:5px;border-radius:4px"><option value="">--</option><option value="T">True</option><option value="F">False</option></select>
+          </div>
+          <button class="btn btn-g" onclick="checkL3()">Check</button>
+          <div id="l3_res" class="fb"></div>
+
+          <p style="margin-top:20px;margin-bottom:10px;font-weight:700">2. Fill in the blanks (Dictation):</p>
+          <div class="qq">1. Do not <input type="text" id="ld4" class="wfi" style="width:100px;display:inline-block"> your face with dirty hands.</div>
+          <div class="qq">2. Always wear a hat and use <input type="text" id="ld5" class="wfi" style="width:100px;display:inline-block">.</div>
+          <div class="qq">3. You should go <input type="text" id="ld6" class="wfi" style="width:100px;display:inline-block"> or run in the park to keep fit.</div>
+          <button class="btn btn-g" onclick="checkL4()">Check</button>
+          <div id="l4_res" class="fb"></div>
+        </div>
+
+      </div>
+    </div>
+    <!-- SPEAKING -->
+    <div class="sec" id="spe">
+      <div class="sh"><h2>💬 Speaking: Giving Advice</h2></div>
+      <div class="card">
+        <p style="margin-bottom:15px;color:var(--gray);font-size:.9rem">Read what your friends are saying, and choose the best advice to give them!</p>
+        <div id="s_chat" style="background:#F9FAFB;padding:15px;border:1px solid #E5E7EB;border-radius:8px;max-width:600px;margin:0 auto;height:400px;overflow-y:auto;display:flex;flex-direction:column;gap:10px">
+          <!-- Chat messages will be injected here -->
+        </div>
+        <div id="s_opts" style="margin-top:15px;display:flex;flex-direction:column;gap:8px;max-width:600px;margin-left:auto;margin-right:auto">
+          <!-- Options will be injected here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- WRITING -->
+    <div class="sec" id="wri">
+      <div class="sh"><h2>✍️ Writing: How to Avoid Viruses</h2></div>
+      <div class="card">
+        <div class="tabs">
+          <button class="tb on" onclick="tab('w_p1',this,'wt')">1. Sentence Builder</button>
+          <button class="tb" onclick="tab('w_p2',this,'wt')">2. Write Paragraph</button>
+        </div>
+
+        <div id="w_p1" class="tpan on wt">
+          <p style="margin-bottom:15px;color:var(--gray);font-size:.9rem">Reorder the phrases to make good advice for avoiding viruses.</p>
+          <div id="w_bld"></div>
+        </div>
+
+        <div id="w_p2" class="tpan wt">
+          <p style="margin-bottom:15px;color:var(--gray);font-size:.9rem">Now, combine your ideas to write a paragraph (about 70 words) giving advice on how to avoid viruses. Include ideas like washing hands, exercising, and keeping surroundings clean.</p>
+          <textarea id="w_txt" style="width:100%;height:150px;padding:10px;border:1px solid #D1D5DB;border-radius:8px;font-family:inherit;margin-bottom:10px" placeholder="Start typing your paragraph here..."></textarea>
+          <button class="btn btn-b" onclick="submitWriting()">📧 Submit to Teacher</button>
+        </div>
+      </div>
+    </div>
+    <!-- MOCK TESTS -->
+    <div class="sec" id="mt">
+      <div class="sh"><h2>💯 Practice Mock Tests</h2></div>
+      <div class="card">
+        <div class="tabs">
+          <button class="tb on" onclick="tab('m_t1',this,'mtt')">Practice Test 1</button>
+          <button class="tb" onclick="tab('m_t2',this,'mtt')">Practice Test 2</button>
+        </div>
+        
+        <div id="m_t1" class="tpan on mtt">
+          <p style="margin-bottom:15px;color:var(--gray)">10 questions covering all Unit 2 skills.</p>
+          <div id="mt1_c"></div>
+          <button class="btn btn-b" onclick="submitMT(1)">Submit Test 1</button>
+          <div id="mt1_res" style="margin-top:15px"></div>
+        </div>
+
+        <div id="m_t2" class="tpan mtt">
+          <p style="margin-bottom:15px;color:var(--gray)">10 advanced questions covering all Unit 2 skills.</p>
+          <div id="mt2_c"></div>
+          <button class="btn btn-b" onclick="submitMT(2)">Submit Test 2</button>
+          <div id="mt2_res" style="margin-top:15px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// MOCK TESTS DATA
+const MT1 = [
+  {q:"Which word has a different sound for the underlined part? (l<u style='font-weight:700'>a</u>ugh, <u style='font-weight:700'>a</u>te, c<u style='font-weight:700'>a</u>tch)", o:['laugh','ate','catch'], a:1},
+  {q:"Which word has the /v/ sound?", o:['leaf','cough','vitamin'], a:2},
+  {q:"Doing housework is a kind of exercise. It helps keep you _______.", o:['weight','fit','acne'], a:1},
+  {q:"Cold weather causes _______ and skin.", o:['chapped lips','dim light','fast food'], a:0},
+  {q:"What is the Verb (V) in: 'My mother didn't buy my favourite cheesecake.'?", o:['My mother','didn\'t buy','favourite cheesecake'], a:1},
+  {q:"Identify the Adverb (Adv): 'She washes her face twice a day.'", o:['She','washes','twice a day'], a:2},
+  {q:"Which sentence is a correct simple sentence?", o:['Asians eat a lot of rice, but Europeans don\'t.','Eat less sweetened food.','Most children love fast food and soft drinks.'], a:2},
+  {q:"Complete the sentence: 'Eat a lot of _______ fruit and vegetables.'", o:['red','blue','sweet'], a:0},
+  {q:"Which is the correct reorder: 'air pollution / be / really harmful / our health'?", o:['Air pollution be really harmful our health.','Air pollution is really harmful to our health.','Our health is really harmful to air pollution.'], a:1},
+  {q:"Which tip helps the Japanese live long lives?", o:['Eating a lot of fast food','Eating a lot of fish and tofu','Working less'], a:1}
+];
+const MT2 = [
+  {q:"Which word has a different sound for the underlined part? (toug<u style='font-weight:700'>h</u>, <u>h</u>igh, enoug<u style='font-weight:700'>h</u>)", o:['tough','high','enough'], a:1},
+  {q:"Which word has the /f/ sound?", o:['avoid','active','fit'], a:2},
+  {q:"Reading in dim light harms your _______.", o:['eyes','weight','fit'], a:0},
+  {q:"Physical activities like running help you lose _______.", o:['acne','weight','fit'], a:1},
+  {q:"What is the Object (O) in: 'Vegetarians eat a lot of vegetables and fruit.'?", o:['Vegetarians','eat','a lot of vegetables and fruit'], a:2},
+  {q:"Identify the Subject (S): 'On Saturdays, my brother often spends two hours exercising.'", o:['On Saturdays','my brother','two hours'], a:1},
+  {q:"Which sentence is NOT a simple sentence?", o:['I don\'t eat fast food, and I don\'t drink soft drinks.','I am fit.','The Japanese eat a lot of tofu.'], a:0},
+  {q:"Complete the sentence: 'Use _______ when you are doing a lot of reading.'", o:['lip balm','eyedrops','suncream'], a:1},
+  {q:"Which is the correct reorder: 'keep you / and active / Physical activities / strong / help'?", o:['Physical activities keep you active and help strong.','Physical activities help keep you strong and active.','Help physical activities keep you strong and active.'], a:1},
+  {q:"Spain is one of the healthiest countries. A major reason is the _______.", o:['fast food','weather','acne'], a:1}
+];
+function initMT(){
+  [1,2].forEach(n=>{
+    const dat = n===1 ? MT1 : MT2;
+    document.getElementById('mt'+n+'_c').innerHTML = dat.map((q,i)=>`
+      <div class="qq">
+        <div class="qt">${i+1}. ${q.q}</div>
+        <div class="opts" style="flex-direction:row;flex-wrap:wrap">
+          ${q.o.map((o,j)=>`<div class="opt mt${n}opt_${i}" style="padding:6px 12px;border-radius:20px" onclick="selMT(this, ${n}, ${i}, ${j})">${o}</div>`).join('')}
+        </div>
+      </div>
+    `).join('');
+  });
+}
+const mt_ans = {1:{}, 2:{}};
+function selMT(btn, n, qi, oi){
+  const p = btn.parentElement;
+  p.querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+  btn.classList.add('sel');
+  mt_ans[n][qi] = oi;
+}
+function submitMT(n){
+  const dat = n===1 ? MT1 : MT2;
+  let s=0;
+  if(Object.keys(mt_ans[n]).length < dat.length){
+    alert("Please answer all questions before submitting."); return;
+  }
+  dat.forEach((q,i)=>{
+    const opts = document.querySelectorAll(`.mt${n}opt_${i}`);
+    opts.forEach(o=>{o.style.pointerEvents='none'; o.classList.remove('ok','no');});
+    if(mt_ans[n][i] === q.a){ s++; opts[q.a].classList.add('ok'); }
+    else { opts[mt_ans[n][i]].classList.add('no'); opts[q.a].classList.add('ok'); }
+  });
+  const res = document.getElementById('mt'+n+'_res');
+  res.innerHTML = `<div style="padding:15px;background:var(--blue-l);border:2px solid var(--blue);border-radius:8px;font-size:1.1rem;font-weight:700">Your Score: ${s}/${dat.length}</div>
+  <button class="btn btn-o" style="margin-top:10px" onclick="window.location.href='mailto:levandu1101@gmail.com?subject=Unit 2 Mock Test ${n} Score&body=Student scored ${s} out of ${dat.length} on Mock Test ${n}.'">📧 Email Score to Teacher</button>`;
+}
+function nav(id){
+  document.querySelectorAll('.sec').forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll('.nb').forEach(e=>e.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  event.currentTarget.classList.add('on');
+}
+function tab(id, btn, grp){
+  document.querySelectorAll('.tpan.'+grp).forEach(e=>e.classList.remove('on'));
+  btn.parentElement.querySelectorAll('.tb').forEach(e=>e.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('on');
+}
+function speak(txt){
+  if('speechSynthesis' in window){
+    const u = new SpeechSynthesisUtterance(txt);
+    u.lang = 'en-US';
+    u.rate = 0.9;
+    window.speechSynthesis.speak(u);
+  } else {
+    alert("Sorry, your browser doesn't support text-to-speech!");
+  }
+}
+function shuf(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+// DATA: VOCAB
+const VOC = [
+  {e:'go cycling', ipa:'/gəʊ ˈsaɪklɪŋ/', v:'đạp xe', d:'ride a bicycle', t:'v.phr', c:'ha'},
+  {e:'wash your hands', ipa:'/wɒʃ jɔː hændz/', v:'rửa tay', d:'clean your hands with soap', t:'v.phr', c:'ha'},
+  {e:'eat breakfast', ipa:'/iːt ˈbrɛkfəst/', v:'ăn sáng', d:'have the first meal of the day', t:'v.phr', c:'ha'},
+  {e:'brush your teeth', ipa:'/brʌʃ jɔː tiːθ/', v:'chải răng', d:'clean your teeth', t:'v.phr', c:'ha'},
+  
+  {e:'read in dim light', ipa:'/riːd ɪn dɪm laɪt/', v:'đọc sách dưới ánh sáng mờ', d:'read when it is not bright enough', t:'v.phr', c:'ua'},
+  {e:'touch your face', ipa:'/tʌʧ jɔː feɪs/', v:'chạm lên mặt', d:'put your hands on your face', t:'v.phr', c:'ua'},
+  {e:'eat fast food', ipa:'/iːt fɑːst fuːd/', v:'ăn thức ăn nhanh', d:'eat unhealthy quick food', t:'v.phr', c:'ua'},
+
+  {e:'get sunburn', ipa:'/gɛt ˈsʌnbɜːn/', v:'bị cháy nắng', d:'get red, painful skin from the sun', t:'v.phr', c:'hp', img:'vocab_sunburn_1790145474219.jpg'},
+  {e:'chapped lips', ipa:'/ʧæpt lɪps/', v:'môi bị nứt nẻ', d:'dry, cracked lips', t:'n.phr', c:'hp', img:'vocab_lip_balm_1790145486481.jpg'},
+  {e:'acne', ipa:'/ˈækni/', v:'mụn trứng cá', d:'a skin condition that causes spots', t:'n', c:'hp', img:'vocab_acne_1790145276377.jpg'},
+  {e:'flu', ipa:'/fluː/', v:'bệnh cúm', d:'an illness causing fever and aches', t:'n', c:'hp'},
+  {e:'red spots', ipa:'/rɛd spɒts/', v:'những đốm đỏ', d:'small red marks on the skin', t:'n.phr', c:'hp'}
+];
+
+// INIT VOCAB
+function initVocab(){
+  // Flashcards
+  document.getElementById('fcg').innerHTML = VOC.map((w,i)=>`
+    <div class="fc" onclick="this.classList.toggle('flip')">
+      <div class="fc-in">
+        <div class="fc-f" style="overflow:hidden">
+          ${w.img ? `<img src="${w.img}" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:0.25;z-index:0">` : ''}
+          <button class="fc-btn" style="z-index:2" onclick="event.stopPropagation();speak('${w.e}')">🔊</button>
+          <div class="fc-w" style="z-index:2;position:relative;background:rgba(255,255,255,0.7);padding:2px 8px;border-radius:4px;margin-bottom:2px">${w.e}</div>
+          <div style="z-index:2;position:relative;font-size:0.8rem;color:var(--gray);margin-bottom:6px">${w.ipa}</div>
+          <div class="fc-type" style="z-index:2;position:relative">${w.t}</div>
+        </div>
+        <div class="fc-b">
+          <div style="font-weight:700;margin-bottom:8px">${w.v}</div>
+          <div style="font-size:.8rem;opacity:.9">${w.d}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  vdInit();
+  // MC
+  const vq = [
+    {q:"My mother says we shouldn't _______ because it harms our eyes.", o:['read in dim light','wash your hands','get sunburn'], a:0},
+    {q:"If you spend too much time in the sun without a hat, you will _______.", o:['acne','get sunburn','flu'], a:1},
+    {q:"In winter, the cold weather often gives me dry, _______.", o:['fast food','red spots','chapped lips'], a:2},
+    {q:"Teenagers often have _______, which causes red spots on the face.", o:['chapped lips','acne','touch your face'], a:1},
+    {q:"You must _______ often with soap to prevent viruses.", o:['go cycling','eat breakfast','wash your hands'], a:2}
+  ];
+  document.getElementById('v_mc').innerHTML = vq.map((q,i)=>`
+    <div class="qq">
+      <div class="qn">Question ${i+1}</div>
+      <div class="qt">${q.q}</div>
+      <div class="opts">
+        ${q.o.map((o,j)=>`<div class="opt" onclick="selV(this, ${i}, ${j}, ${q.a})">${o}</div>`).join('')}
+      </div>
+      <div id="vfb${i}" class="fb"></div>
+    </div>
+  `).join('');
+}
+function selV(btn, qi, oi, ai){
+  const p = btn.parentElement;
+  p.querySelectorAll('.opt').forEach(o=>{o.classList.remove('sel');o.style.pointerEvents='none'});
+  btn.classList.add('sel');
+  const fb = document.getElementById('vfb'+qi);
+  fb.style.display='block';
+  if(oi===ai){
+    btn.classList.add('ok'); fb.className='fb ok'; fb.innerHTML='✅ Correct!';
+  }else{
+    btn.classList.add('no'); p.children[ai].classList.add('ok'); fb.className='fb no'; fb.innerHTML='❌ Incorrect.';
+  }
+}
+
+// VOCAB D&D
+let dragItem = null;
+function dStart(e, isVoc){ 
+  dragItem = e.target; 
+  e.dataTransfer.setData('text/plain', e.target.innerText);
+  e.target.style.opacity = '0.5';
+}
+function dEnd(e){ e.target.style.opacity = '1'; }
+function vdDrop(e, z){
+  e.preventDefault();
+  if(!dragItem || dragItem.dataset.type !== 'voc') return;
+  const targetId = z==='src' ? 'vdnd_src' : 'z_'+z;
+  document.getElementById(targetId).appendChild(dragItem);
+}
+function vdInit(){
+  ['z_ha','z_ua','z_hp'].forEach(id=>document.getElementById(id).innerHTML='');
+  const ws = shuf([...VOC]);
+  document.getElementById('vdnd_src').innerHTML = ws.map(w=>`<div class="tile" draggable="true" data-type="voc" data-ans="${w.c}" ondragstart="dStart(event,true)" ondragend="dEnd(event)">${w.e}</div>`).join('');
+  document.getElementById('vd_res').innerHTML='';
+}
+function vdCheck(){
+  let s=0, t=VOC.length;
+  document.querySelectorAll('#v_p1 .tile').forEach(el=>{
+    const pId = el.parentElement.id;
+    if(pId === 'vdnd_src') return;
+    if(pId === 'z_'+el.dataset.ans){ el.classList.add('ok'); el.classList.remove('no'); s++; }
+    else { el.classList.add('no'); el.classList.remove('ok'); }
+  });
+  document.getElementById('vd_res').innerHTML = `Score: ${s}/${t}`;
+}
+
+// DATA: PRONUNCIATION
+const PRON = [
+  {w:'cough', c:'f'}, {w:'of', c:'v'}, {w:'laugh', c:'f'}, {w:'vitamin', c:'v'},
+  {w:'fit', c:'f'}, {w:'avoid', c:'v'}, {w:'active', c:'v'}, {w:'food', c:'f'},
+  {w:'leaf', c:'f'}, {w:'leave', c:'v'}
+];
+function pdDrop(e, z){
+  e.preventDefault();
+  if(!dragItem || dragItem.dataset.type !== 'pro') return;
+  const targetId = z==='src' ? 'pdnd_src' : 'z_p'+z;
+  document.getElementById(targetId).appendChild(dragItem);
+}
+function pdInit(){
+  ['z_pf','z_pv'].forEach(id=>document.getElementById(id).innerHTML='');
+  const ws = shuf([...PRON]);
+  document.getElementById('pdnd_src').innerHTML = ws.map(w=>`<div class="tile" draggable="true" data-type="pro" data-ans="${w.c}" ondragstart="dStart(event,false)" ondragend="dEnd(event)" onclick="speak('${w.w}')">🔊 ${w.w}</div>`).join('');
+  document.getElementById('pd_res').innerHTML='';
+}
+function pdCheck(){
+  let s=0, t=PRON.length;
+  document.querySelectorAll('#pro .tile').forEach(el=>{
+    const pId = el.parentElement.id;
+    if(pId === 'pdnd_src') return;
+    if(pId === 'z_p'+el.dataset.ans){ el.classList.add('ok'); el.classList.remove('no'); s++; }
+    else { el.classList.add('no'); el.classList.remove('ok'); }
+  });
+  document.getElementById('pd_res').innerHTML = `Score: ${s}/${t}`;
+}
+
+// DATA: GRAMMAR
+const GID = [
+  {s:"<u>Vegetarians</u> eat a lot of vegetables.", o:['Subject','Verb','Object','Adverb'], a:0},
+  {s:"Acne <u>causes</u> black and white pimples.", o:['Subject','Verb','Object','Adverb'], a:1},
+  {s:"He likes cycling <u>in the park</u>.", o:['Subject','Verb','Object','Adverb'], a:3},
+  {s:"Asian diets contain <u>a lot of vegetables</u>.", o:['Subject','Verb','Object','Adverb'], a:2}
+];
+const GUN = [
+  {w:['soft drinks', 'never', 'drinks', 'my sister'], a:'my sister never drinks soft drinks'},
+  {w:['has', 'he', 'for breakfast', 'bread and eggs'], a:'he has bread and eggs for breakfast'},
+  {w:['don\'t eat', 'we', 'much fast food'], a:'we don\'t eat much fast food'}
+];
+function initGram(){
+  // Identify
+  document.getElementById('g_id').innerHTML = GID.map((q,i)=>`
+    <div class="qq">
+      <div class="qt">${q.s}</div>
+      <div class="opts" style="flex-direction:row;flex-wrap:wrap">
+        ${q.o.map((o,j)=>`<div class="opt" style="padding:6px 12px;border-radius:20px" onclick="selG(this, ${i}, ${j}, ${q.a})">${o}</div>`).join('')}
+      </div>
+      <div id="gfb${i}" class="fb"></div>
+    </div>
+  `).join('');
+  
+  // Unscramble
+  document.getElementById('g_un').innerHTML = GUN.map((q,i)=>`
+    <div class="qq" id="gun${i}">
+      <div class="src-area" style="min-height:50px;background:var(--blue-l);border-color:var(--blue)" onclick="if(event.target.classList.contains('tile')) unTile(event, ${i})"></div>
+      <div class="src-area" style="min-height:50px" onclick="if(event.target.classList.contains('tile')) unTile(event, ${i})">
+        ${shuf([...q.w]).map((w,j)=>`<div class="tile" style="cursor:pointer">${w}</div>`).join('')}
+      </div>
+      <button class="btn btn-g" onclick="checkGun(${i}, '${q.a}')">Check</button>
+      <div class="fb"></div>
+    </div>
+  `).join('');
+}
+function selG(btn, qi, oi, ai){
+  const p = btn.parentElement;
+  p.querySelectorAll('.opt').forEach(o=>{o.classList.remove('sel');o.style.pointerEvents='none'});
+  btn.classList.add('sel');
+  const fb = document.getElementById('gfb'+qi);
+  fb.style.display='block';
+  if(oi===ai){ btn.classList.add('ok'); fb.className='fb ok'; fb.innerHTML='✅ Correct!'; }
+  else{ btn.classList.add('no'); p.children[ai].classList.add('ok'); fb.className='fb no'; fb.innerHTML='❌ Incorrect.'; }
+}
+function unTile(e, i){
+  const c = document.getElementById('gun'+i);
+  const t = c.querySelectorAll('.src-area');
+  if(e.target.parentElement === t[1]) t[0].appendChild(e.target);
+  else t[1].appendChild(e.target);
+}
+function checkGun(i, ans){
+  const c = document.getElementById('gun'+i);
+  const t = c.querySelectorAll('.src-area')[0];
+  const fb = c.querySelector('.fb');
+  const res = Array.from(t.children).map(x=>x.innerText.toLowerCase()).join(' ');
+  fb.style.display='block';
+  if(res === ans){ fb.className='fb ok'; fb.innerHTML='✅ Correct!'; }
+  else { fb.className='fb no'; fb.innerHTML='❌ Incorrect. Try again!'; }
+}
+
+// DATA: READING
+const RMC = [
+  {q:"The first paragraph is mainly about _______.", o:['what acne is', 'how to avoid acne', 'why people have acne'], a:0},
+  {q:"Which statement is NOT correct about acne?", o:['Acne is a skin condition.', 'Acne may get serious.', 'Acne affects more boys than girls.'], a:2},
+  {q:"What age group does acne affect the most?", o:['12 - 20', '12 - 30', '70 - 80'], a:1},
+  {q:"How should you wash your face?", o:['3 - 4 times a day', 'With special soap for acne', 'With cold water'], a:1},
+  {q:"What does the word 'it' in the last sentence refer to?", o:['acne', 'disease', 'spot'], a:0}
+];
+function initRead(){
+  document.getElementById('r_mc').innerHTML = RMC.map((q,i)=>`
+    <div class="qq">
+      <div class="qt">${i+1}. ${q.q}</div>
+      <div class="opts">
+        ${q.o.map((o,j)=>`<div class="opt" onclick="selR(this, ${i}, ${j}, ${q.a})">${o}</div>`).join('')}
+      </div>
+      <div id="rfb${i}" class="fb"></div>
+    </div>
+  `).join('');
+}
+function selR(btn, qi, oi, ai){
+  const p = btn.parentElement;
+  p.querySelectorAll('.opt').forEach(o=>{o.classList.remove('sel');o.style.pointerEvents='none'});
+  btn.classList.add('sel');
+  const fb = document.getElementById('rfb'+qi);
+  fb.style.display='block';
+  if(oi===ai){ btn.classList.add('ok'); fb.className='fb ok'; fb.innerHTML='✅ Correct!'; }
+  else{ btn.classList.add('no'); p.children[ai].classList.add('ok'); fb.className='fb no'; fb.innerHTML='❌ Incorrect.'; }
+}
+
+// LISTENING LOGIC
+let a1 = new Audio('./Listening audio/Listening 1.wav');
+let a2 = new Audio('./Listening audio/Listening 2.wav');
+function playListen(num){
+  if(num===1) { a2.pause(); a2.currentTime=0; a1.play(); }
+  else { a1.pause(); a1.currentTime=0; a2.play(); }
+}
+
+function checkL1(){
+  const a=[document.getElementById('lh1').checked, document.getElementById('lh2').checked, document.getElementById('lh3').checked, document.getElementById('lh4').checked, document.getElementById('lh5').checked];
+  const fb = document.getElementById('l1_res');
+  fb.style.display='block';
+  if(!a[0] && !a[1] && a[2] && a[3] && !a[4]){
+    fb.className='fb ok'; fb.innerHTML='✅ Perfect! You caught all the mentioned habits (exercising and sleeping).';
+  } else {
+    fb.className='fb no'; fb.innerHTML='❌ Not quite. Listen carefully again! Only exercising and sleeping 8 hours are mentioned.';
+  }
+}
+function checkL2(){
+  // Versatile check arrays
+  const ans = [ ['cheese'], ['eight', '8'], ['active'] ];
+  let s=0;
+  for(let i=1;i<=3;i++){
+    const el = document.getElementById('ld'+i);
+    const val = el.value.toLowerCase().trim();
+    if(ans[i-1].includes(val)){ el.classList.add('ok'); el.classList.remove('no'); s++; }
+    else{ el.classList.add('no'); el.classList.remove('ok'); }
+  }
+  const fb = document.getElementById('l2_res');
+  fb.style.display='block';
+  fb.className = s===3 ? 'fb ok' : 'fb no';
+  fb.innerHTML = s===3 ? '✅ Excellent!' : '❌ Some answers are incorrect.';
+}
+
+function checkL3(){
+  const a1 = document.getElementById('ltf1').value;
+  const a2 = document.getElementById('ltf2').value;
+  const fb = document.getElementById('l3_res');
+  fb.style.display='block';
+  if(a1==='F' && a2==='T'){
+    fb.className='fb ok'; fb.innerHTML='✅ Correct! (Wash twice a day, and touching causes spots)';
+  } else {
+    fb.className='fb no'; fb.innerHTML='❌ Try again! Hint: Wash twice a day.';
+  }
+}
+
+function checkL4(){
+  const ans = [ ['touch'], ['suncream', 'sunscreen'], ['cycling'] ];
+  let s=0;
+  for(let i=1;i<=3;i++){
+    const el = document.getElementById('ld'+(i+3));
+    const val = el.value.toLowerCase().trim();
+    if(ans[i-1].includes(val)){ el.classList.add('ok'); el.classList.remove('no'); s++; }
+    else{ el.classList.add('no'); el.classList.remove('ok'); }
+  }
+  const fb = document.getElementById('l4_res');
+  fb.style.display='block';
+  fb.className = s===3 ? 'fb ok' : 'fb no';
+  fb.innerHTML = s===3 ? '✅ Excellent!' : '❌ Some answers are incorrect.';
+}
+
+// SPEAKING LOGIC
+const S_CHAT = [
+  {m:"I have chapped lips.", o:['You should use lip balm.', 'You should wear a hat.', 'You should eat fast food.'], a:0},
+  {m:"I'm putting on weight.", o:['You should sleep less.', 'You should eat more vegetables and exercise.', 'You should drink more soft drinks.'], a:1},
+  {m:"My eyes are tired.", o:['You should read in dim light.', 'You should listen to loud music.', 'You can use eye drops and shouldn\'t read in dim light.'], a:2},
+  {m:"I have the flu.", o:['You should get some rest and drink warm water.', 'You should go outside and play.', 'You should eat ice cream.'], a:0}
+];
+let s_step = 0;
+function initSpeak(){ s_step=0; document.getElementById('s_chat').innerHTML=''; nextSpeak(); }
+function nextSpeak(){
+  if(s_step >= S_CHAT.length){
+    document.getElementById('s_chat').innerHTML += `<div style="text-align:center;color:var(--green);font-weight:700;margin-top:20px">🎉 Great job giving advice!</div>`;
+    document.getElementById('s_opts').innerHTML = `<button class="btn btn-o" onclick="initSpeak()">Restart</button>`;
+    return;
+  }
+  const d = S_CHAT[s_step];
+  document.getElementById('s_chat').innerHTML += `
+    <div style="display:flex;gap:10px;align-items:flex-start">
+      <div style="font-size:1.5rem">🙍‍♂️</div>
+      <div style="background:#fff;border:1px solid #E5E7EB;padding:10px;border-radius:0 12px 12px 12px;max-width:80%">${d.m}</div>
+    </div>
+  `;
+  document.getElementById('s_opts').innerHTML = d.o.map((o,j)=>`<button class="btn btn-o" style="justify-content:flex-start;text-align:left" onclick="ansSpeak(${j}, ${d.a})">${o}</button>`).join('');
+  document.getElementById('s_chat').scrollTop = document.getElementById('s_chat').scrollHeight;
+}
+function ansSpeak(sel, ans){
+  const d = S_CHAT[s_step];
+  if(sel === ans){
+    document.getElementById('s_chat').innerHTML += `
+      <div style="display:flex;gap:10px;align-items:flex-start;flex-direction:row-reverse">
+        <div style="font-size:1.5rem">👩‍⚕️</div>
+        <div style="background:var(--blue);color:#fff;padding:10px;border-radius:12px 0 12px 12px;max-width:80%">${d.o[sel]}</div>
+      </div>
+    `;
+    s_step++;
+    setTimeout(nextSpeak, 800);
+  } else {
+    alert("Hmm, that might not be the best advice. Try again!");
+  }
+}
+
+// WRITING LOGIC
+const W_BLD = [
+  {w:['hands', 'wash', 'often', 'your', 'with soap'], a:'wash your hands often with soap'},
+  {w:['should', 'every day', 'you', 'exercise'], a:'you should exercise every day'},
+  {w:['wear a mask', 'when', 'you go out'], a:'wear a mask when you go out'},
+  {w:['surroundings', 'keep', 'clean', 'your'], a:'keep your surroundings clean'}
+];
+function initWrite(){
+  document.getElementById('w_bld').innerHTML = W_BLD.map((q,i)=>`
+    <div class="qq" id="wb${i}">
+      <div class="src-area" style="min-height:50px;background:var(--green-l);border-color:var(--green)" onclick="if(event.target.classList.contains('tile')) unTileW(event, ${i})"></div>
+      <div class="src-area" style="min-height:50px" onclick="if(event.target.classList.contains('tile')) unTileW(event, ${i})">
+        ${shuf([...q.w]).map((w,j)=>`<div class="tile" style="cursor:pointer">${w}</div>`).join('')}
+      </div>
+      <button class="btn btn-g" onclick="checkWb(${i}, '${q.a}')">Check</button>
+      <div class="fb"></div>
+    </div>
+  `).join('');
+}
+function unTileW(e, i){
+  const c = document.getElementById('wb'+i);
+  const t = c.querySelectorAll('.src-area');
+  if(e.target.parentElement === t[1]) t[0].appendChild(e.target);
+  else t[1].appendChild(e.target);
+}
+function checkWb(i, ans){
+  const c = document.getElementById('wb'+i);
+  const t = c.querySelectorAll('.src-area')[0];
+  const fb = c.querySelector('.fb');
+  const res = Array.from(t.children).map(x=>x.innerText.toLowerCase()).join(' ');
+  fb.style.display='block';
+  if(res === ans){ fb.className='fb ok'; fb.innerHTML='✅ Good sentence!'; }
+  else { fb.className='fb no'; fb.innerHTML='❌ Try again!'; }
+}
+function submitWriting(){
+  const txt = document.getElementById('w_txt').value;
+  if(txt.length < 20){ alert('Please write a bit more before submitting.'); return; }
+  window.location.href = "mailto:levandu1101@gmail.com?subject=Unit 2 Writing Submission&body=" + encodeURIComponent(txt);
+}
+
+window.onload = function(){
+  initVocab();
+  pdInit();
+  initGram();
+  initRead();
+  initSpeak();
+  initWrite();
+  initMT();
+};
+</script>
+</body>
+</html>
