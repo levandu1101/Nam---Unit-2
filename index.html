@@ -223,7 +223,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:#1F2
         </div>
 
         <div id="l_s1" class="tpan on lscript">
-          <button class="btn btn-b" onclick="playListen(1)" style="margin-bottom:20px;font-size:1.1rem">▶️ Play Audio 1</button>
+          <audio id="ap1" controls style="width:100%;max-width:400px;margin-bottom:20px"></audio>
           <p style="margin-bottom:10px;font-weight:700">1. Which habits were mentioned? (Tick the boxes)</p>
           <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:15px">
             <label><input type="checkbox" id="lh1"> eating healthy food</label>
@@ -244,7 +244,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:#1F2
         </div>
 
         <div id="l_s2" class="tpan lscript">
-          <button class="btn btn-b" onclick="playListen(2)" style="margin-bottom:20px;font-size:1.1rem">▶️ Play Audio 2</button>
+          <audio id="ap2" controls style="width:100%;max-width:400px;margin-bottom:20px"></audio>
           
           <p style="margin-bottom:10px;font-weight:700">1. True or False?</p>
           <div class="qq">
@@ -780,6 +780,8 @@ function submitWriting(){
 }
 
 window.onload = function(){
+  document.getElementById('ap1').src = a1.src;
+  document.getElementById('ap2').src = a2.src;
   initVocab();
   pdInit();
   initGram();
